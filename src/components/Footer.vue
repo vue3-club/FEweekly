@@ -1,19 +1,6 @@
 <template>
   <div class="weekly">
-    <div class="cover">
-      <img src="../../static/test.jpg" alt="">
-    </div>
-    <div class="main">
-      <div class="category"  v-for="item in [1,2]">
-        <h2 class="category_title">👍🏼前端优化</h2>
-        <ul class="list">
-          <li v-for="item in [1,2,3]" >
-            <h3><a href="#">脚本错误量极致优化-监控上报与Script error</a></h3>
-            <p class="desc">讲解脚本错误监控和上报方式，详细地介绍 Script error 产生原因和处理方法,本文结合示例，通过多种方案逐一分析，解决 JS 压缩混淆后脚本错误难以定位的问题</p>
-          </li>
-        </ul>
-      </div>
-    </div>
+      footer
   </div>
 </template>
 
