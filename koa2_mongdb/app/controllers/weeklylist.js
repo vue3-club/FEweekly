@@ -25,6 +25,8 @@ exports.add = async (ctx, next) => {
 }
 
 exports.list = async (ctx, next) => {
+    // console.log(ctx.session)
+    console.log(`list-session:${JSON.stringify(ctx.session)}`)
     var data = await weeklylistHelper.list()
     ctx.body = {
         status:1,

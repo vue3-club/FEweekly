@@ -47,8 +47,7 @@
             //NProgress.start();
             var loginParams = { username: this.ruleForm2.account, password: this.ruleForm2.checkPass };
               axios.post(frontUrl+'/api/user/login', {
-                    params: loginParams,
-                    withCredentials: true
+                    params: loginParams
                   })
               .then(function (res) {
                  if(res.data.status=="1"){
