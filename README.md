@@ -28,3 +28,10 @@ npm test
 ```
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+# 后台 koa2_mongdb
+## koa2_mongdb主要提供后台接口服务，默认9090端口启动，对外暴露两个接口参考其中的路由接口注释
+# 前台默认8080端口启动
+
+# todo跨域session,cookie未完工。
+
