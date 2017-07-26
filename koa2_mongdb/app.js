@@ -43,23 +43,36 @@ require('babel-register')
 const Koa = require('koa')
 const logger = require('koa-logger')
 //应用处理 session 的中间件
-const session = require("koa-session2")
+const session = require("koa-session")
 const bodyParser = require('koa-bodyparser')
 var cors = require('koa2-cors')
 const app = new Koa()
 app.use(logger())
 app.use(bodyParser())
+
+app.keys = ['feweekly'];
+const CONFIG = {
+  key: 'koa:sess', /** (string) cookie key (default is koa:sess) */
+  /** (number || 'session') maxAge in ms (default is 1 days) */
+  /** 'session' will result in a cookie that expires when session/browser is closed */
+  /** Warning: If a session cookie is stolen, this cookie will never expire */
+  maxAge: 86400000,
+  overwrite: true, /** (boolean) can overwrite or not (default true) */
+  httpOnly: true, /** (boolean) httpOnly or not (default true) */
+  signed: true, /** (boolean) signed or not (default true) */
+  rolling: false, /** (boolean) Force a session identifier cookie to be set on every response. The expiration is reset to the original maxAge, resetting the expiration countdown. default is false **/
+};
+
+app.use(session(CONFIG, app));
+
 // 应用处理 session 的中间件
-app.use(session({
-    key: "SESSIONID"
-}));
+// app.use(session({
+//     key: "SESSIONID"
+// }));
+
+
 app.use(cors({
-  origin: function(ctx) {
-    if (ctx.url === '/test') {
-      return false;
-    }
-    return 'http://127.0.0.1:8080';
-  },
+  origin: (ctx)=> ctx.request.header.origin,
   exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
   maxAge: 5,
   credentials: true,

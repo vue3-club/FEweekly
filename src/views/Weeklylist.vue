@@ -200,7 +200,9 @@
 			handleList(){
 				let that = this;
 				let base = '';
-				axios.get(frontUrl+`/api/weeklylist/list`)
+				axios.get(frontUrl+`/api/weeklylist/list`,{
+				withCredentials: true,
+				})
 					.then(function (res) {
 						//this.total = res.data.total;
 						that.weeklylists = res.data.result;

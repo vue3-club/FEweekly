@@ -1,15 +1,22 @@
 <template>
-  <div class="weekly">
-      footer
+  <div class="footer">
+    <div class="footer_decs">
+      <img src="../../static/qrcode.jpg" alt="qrcode">
+      <div class="">
+        <h3>👈🏼VueJs中文社区微信公众号</h3>
+        👈🏼关注VueJs中文社区微信公众号</br>
+        👈🏼随时随地了解前端最新资讯
+      </div>
+    </div>
+    <p class="copyright">Copyright© 2017 <a href="https://www.vue-js.com">vueClub</a>. All Rights Reserved.</p>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'hello',
+  name: 'footer',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
     }
   }
 }
@@ -18,46 +25,34 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
   @import (reference) "../shared.less";
-  .weekly{
+  .footer_decs{
     width:@bodyWdith;
     margin: 22px auto 0;
     border: 1px solid #ccc;
     background: #fff;
+    padding:20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    img{
+      width: 100px;
+      height: 100px;
+      margin-right: 20px;
+    }
+    div{
+      font-size: 12px;
+      color: #ccc
+    }
     @media (max-width: @bodyWdith) {
       width: 100%;
-      margin: 0;
       border: none;
+      border-top: 1px solid #f1f1f1
     }
   }
-  .main{
-    padding: 40px;
+  .copyright{
+    padding: 15px;
+    font-size: 12px;
+    text-align: center;
   }
-  .category{
-    .category_title{
-      color: @defaultColor;
-      margin-bottom: 8px;
-    }
-    .desc{
-      margin: 8px  0;
-      padding-left: 8px;
-      border-left: 3px solid @lightColor;
-      margin-left: 15px;
-    }
-    .list{
-      li{
-        margin-bottom: 25px;
-      }
-    }
-  }
-  .cover{
-    height: 220px;
-    background: #d4d4dd;
-    overflow: hidden;
-    img{
-      min-width: 100%;
-      min-height: 100%;
-      vertical-align: middle;
-      filter: blur(3px);
-    }
-  }
+
 </style>

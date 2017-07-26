@@ -21,8 +21,7 @@ exports.add = async (ctx, next) => {
 //分类列表
 exports.list = async (ctx, next) => {
   var data = await WeeklyClassificateHelper.list()
-  console.log("ctx.session")
-  console.log(ctx.session)
+  console.log(`cate-list-session:${JSON.stringify(ctx.session)}`)
   ctx.body = {
     status:1,
     message:'success',
