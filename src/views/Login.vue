@@ -13,9 +13,8 @@
     </el-form-item>
   </el-form>
 </template>
-
 <script>
-  import axios from 'axios'
+  import http from '../utils/http'
   import {frontUrl} from '../../config/frontUrl'
   export default {
     data() {
@@ -37,44 +36,34 @@
       };
     },
     methods: {
-      handleSubmit(ev) {
-        //this.$router.push({ path: '/admin/index' });
-        var that = this;
-        this.$refs.ruleForm2.validate((valid) => {
-          if (valid) {
-            //_this.$router.replace('/table');
-            this.logining = true;
-            //NProgress.start();
-            var loginParams = { username: this.ruleForm2.account, password: this.ruleForm2.checkPass };
-              axios.post(frontUrl+'/api/user/login', {
-                    params: loginParams
-                  })
-              .then(function (res) {
-                 if(res.data.status=="1"){
-                    //sessionStorage.setItem('user', JSON.stringify(user));
-                    that.$router.push({ path: '/admin/index' });
-                 }else {
-                    that.$message({
-                       message: res.data.message,
-                       type: 'error'
-                    });
-                 }
-              })
-              .catch(function (error) {
-                console.log(JSON.stringify(error));
-              });
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
-        //
+       handleSubmit:function() {
+          this.$refs.ruleForm2.validate((valid) => {
+              if (valid) {
+                this.logining = true;
+                var loginParams = { username: this.ruleForm2.account, password: this.ruleForm2.checkPass }
+                this.login(loginParams)
+              } else {
+                console.log('error submit!!');
+                return false;
+              }
+          });
+      },
+      login: async function(loginParams){
+           const res = await http.post(frontUrl+'/api/user/login',loginParams)
+            if(res.data.status=="1"){
+                  this.$router.push({ path: '/admin/index' });
+            }else {
+                  this.$message({
+                      message: res.data.message,
+                      type: 'error'
+                  });
+             }
       }
     }
   }
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
   .login-container {
     /*box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.06), 0 1px 0px 0 rgba(0, 0, 0, 0.02);*/
     -webkit-border-radius: 5px;
