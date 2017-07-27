@@ -4,10 +4,10 @@ var Weeklylist = mongoose.model('weeklylist')
 import weeklylistHelper from '../dbhelper/weeklylistHelper'
 
 exports.add = async (ctx, next) => {
-    const cover_url = ctx.request.body.params.cover_url
-    const period = ctx.request.body.params.period
-    const title = ctx.request.body.params.title
-    const info = JSON.stringify(ctx.request.body.params.info)
+    const cover_url = ctx.request.body.cover_url
+    const period = ctx.request.body.period
+    const title = ctx.request.body.title
+    const info = JSON.parse(ctx.request.body.info)
     var weeklylist = new Weeklylist({
         cover_url: cover_url,
         period: period,
@@ -16,12 +16,12 @@ exports.add = async (ctx, next) => {
     })
     var weeklylist2 =  await weeklylistHelper.add(weeklylist)
     if(weeklylist2){
-        ctx.body = {
-        success: true,
-        data : weeklylist2
+       ctx.body = {
+            status:1,
+            message:'success',
+            result:weeklylist2
         }
     }
-
 }
 
 exports.list = async (ctx, next) => {
@@ -39,13 +39,15 @@ exports.del = async (ctx, next) => {
     const _id = ctx.request.query._id
     var data  = await weeklylistHelper.del({_id})
     ctx.body = {
-        success: true,
-        data
+        status:1,
+        message:'success',
+        result:data
     }
   
 }
 exports.getWeeklyFindById = async (ctx, next) => {
     const period = ctx.request.query.period
+    console.log("period")
     var data  = await weeklylistHelper.getWeeklyFindById({period})
     ctx.body = {
         status:1,
@@ -55,11 +57,11 @@ exports.getWeeklyFindById = async (ctx, next) => {
 }
 
 exports.update = async (ctx, next) => {
-    const _id = ctx.request.body.params._id
-    const cover_url = ctx.request.body.params.cover_url
-    const period = ctx.request.body.params.period
-    const title = ctx.request.body.params.title
-    const info = JSON.stringify(ctx.request.body.params.info)
+    const _id = ctx.request.body._id
+    const cover_url = ctx.request.body.cover_url
+    const period = ctx.request.body.period
+    const title = ctx.request.body.title
+    const info = JSON.stringify(ctx.request.body.info)
     var wherestr = {'_id' : _id};
     var updatestr = {'cover_url': cover_url,'period':period,'title':title,'info':info};
 

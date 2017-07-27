@@ -8,29 +8,16 @@ import userHelper from '../dbhelper/userHelper'
 //登录
 exports.findByUsername = async (ctx, next) => {
   console.log(ctx)
-    const username = ctx.request.body.params.username
-    const password = ctx.request.body.params.password
+    const username = ctx.request.body.username
+    const password = ctx.request.body.password
     var data  = await userHelper.findByUsername({username})
     if(data){
         if(data.password==password){
-
-           // ctx.cookies.set(
-           //  'testcookie', 
-           //  'testcookie',
-           //    {
-           //      domain: '127.0.0.1',  // 写cookie所在的域名
-           //      path: '/',       // 写cookie所在的路径
-           //      maxAge: 10 * 60 * 1000, // cookie有效时长
-           //      httpOnly: false,  // 是否只用于http请求中获取
-           //      overwrite: false  // 是否允许重写
-           //    }
-           //  )
             ctx.session.user = {
                     username,
                     password
             }
-            
-            console.log(`user:ctx.session.user-${JSON.stringify(ctx.session.user)}`)
+           console.log(`user:ctx.session.user-${JSON.stringify(ctx.session.user)}`)
            ctx.body = {
               status:1,
               message:'success'
@@ -48,4 +35,11 @@ exports.findByUsername = async (ctx, next) => {
           message:'用户名不存在'
         }
     }
+}
+exports.logout = async (ctx, next) => {
+      ctx.session = null
+      ctx.body = {
+              status:1,
+              message:'success'
+     }
 }

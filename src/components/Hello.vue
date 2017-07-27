@@ -1,30 +1,69 @@
 <template>
   <div class="weekly">
     <div class="cover">
-      <img src="../../static/test.jpg" alt="">
+      <img v-bind:src="weekly.cover_url" alt="">
     </div>
     <div class="main">
-      <div class="category"  v-for="item in [1,2]">
-        <h2 class="category_title">👍🏼前端优化</h2>
+      <div class="category"  v-for="info in weekly.info">
+        <h2 class="category_title">👍🏼{{info.type_name}}</h2>
         <ul class="list">
-          <li v-for="item in [1,2,3]" >
-            <h3><a href="#">脚本错误量极致优化-监控上报与Script error</a></h3>
-            <p class="desc">讲解脚本错误监控和上报方式，详细地介绍 Script error 产生原因和处理方法,本文结合示例，通过多种方案逐一分析，解决 JS 压缩混淆后脚本错误难以定位的问题</p>
+          <li v-for="list in info.list" >
+            <h3><a :href="list.url">{{list.title}}</a></h3>
+            <p class="desc">{{list.describe}}</p>
           </li>
         </ul>
       </div>
     </div>
   </div>
 </template>
-
 <script>
+import http from '../utils/http'
+import {frontUrl} from '../../config/frontUrl'
+import axios from 'axios'
 export default {
   name: 'hello',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'Welcome to FEweekly',
+      weekly:{
+          cover_url: '', 
+          period: '', 
+          title: '',
+          info:[]
+			}
     }
-  }
+  },
+  methods: {
+		//列表
+		list:async function(){
+        let that = this
+        let para = { period: 1 }
+        // const res = await http.get(frontUrl+'api/weeklylist/getWeeklyFindById',para)
+				// if(res.data.result[0]){
+        //       that.weekly = res.data.result[0];
+        //       that.weekly.info=JSON.parse(res.data.result[0].info)
+        // }
+        axios.get(frontUrl+'/api/weeklylist/getWeeklyFindById', {
+          params: para,
+          withCredentials: true
+        })
+        .then(function (res) {
+            if(res.data.result[0]){
+              that.weekly = res.data.result[0];
+              that.weekly.info=JSON.parse(res.data.result[0].info)
+            }
+        })
+        .catch(function (error) {
+          console.log(JSON.stringify(error));
+        });
+
+        
+		}
+  },
+  mounted() {
+		this.list();
+
+	}
 }
 </script>
 
