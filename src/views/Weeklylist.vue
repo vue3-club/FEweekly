@@ -3,18 +3,11 @@
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="filters">
-				<!-- <el-form-item>
-					<el-input v-model="filters.name" placeholder="姓名"></el-input>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" v-on:click="getUsers">查询</el-button>
-				</el-form-item> -->
 				<el-form-item>
 					<el-button type="primary" @click="handleAdd">新增</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
-
 		<!--列表-->
 		  <el-table :data="weeklylists" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
 			<el-table-column prop="period" label="周刊周期" min-width="60" sortable>
@@ -30,14 +23,6 @@
 				</template>
 			</el-table-column> 
 		</el-table>  
-
-		<!--工具条-->
-		<!-- <el-col :span="24" class="toolbar">
-			<el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
-			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
-			</el-pagination>
-		</el-col> -->
-
 		<!--编辑界面-->
 		<el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false">
 			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
@@ -101,14 +86,6 @@
 					<el-input v-model="addForm.title" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="列表">
-					 <!-- <el-select v-model="addForm.title" placeholder="请选择">
-						<el-option
-						v-for="item in weeklyClass"
-						:key="item.name"
-						:label="item.name"
-						:value="item.name">
-						</el-option>
-					</el-select>  -->
 					<el-button type="primary" class="el-icon-plus" @click="add">添加分类</el-button>
 				</el-form-item>
 			    <div  v-for="(item,index) in addForm.info">
@@ -150,6 +127,7 @@
 
 <script>
 	import {frontUrl} from '../../config/frontUrl'
+	import http from '../utils/http'
 	import axios from 'axios'
 	export default {
 		data() {
@@ -197,21 +175,18 @@
 		},
 		methods: {
 			//列表
-			handleList(){
+			handleList:async function(){
 				let that = this;
-				let base = '';
-				axios.get(frontUrl+`/api/weeklylist/list`,{
-				withCredentials: true,
-				})
-					.then(function (res) {
-						//this.total = res.data.total;
-						that.weeklylists = res.data.result;
-
-						that.listLoading = false;
-					})
-					.catch(function (error) {
-						console.log(JSON.stringify(error));
+				const res = await http.get(frontUrl+'/api/weeklylist/list',)
+				if(res.data.status=="1"){ 
+					this.weeklylists = res.data.result;
+                    this.listLoading = false;
+				}else {
+					this.$message({
+						message: res.data.message,
+						type: 'error'
 					});
+				}
 			},
 			//显示新增界面
 			handleAdd: function () {
@@ -233,24 +208,26 @@
 				}).then(() => {
 					this.listLoading = true;
 					let para = { _id: row._id};
-					axios.get(frontUrl+'/api/weeklylist/del', {
-							params: para
-						})
-					.then(function (res) {
-						that.weeklylists = res.data.result;
-						that.listLoading = false;
-						that.$message({
-							message: '删除成功',
-							type: 'success'
-						});
-						that.handleList();
-					})
-					.catch(function (error) {
-						console.log(JSON.stringify(error));
-					});
+					this.del(para)
 				}).catch(() => {
 
 				});
+			},
+			del:async function(para){
+				const res =  await http.get(frontUrl+'/api/weeklylist/del',para)
+				if(res.data.status=="1"){ 
+					this.listLoading = false;
+					this.$message({
+						message: '删除成功',
+						type: 'success'
+					});
+					this.handleList();
+				}else {
+					this.$message({
+						message: res.data.message,
+						type: 'error'
+					});
+				}     
 			},
 			//显示编辑界面
 			handleEdit: function (index, row) {
@@ -267,41 +244,28 @@
 							this.editLoading = true;
 							//NProgress.start();
 							let para = Object.assign({}, this.editForm);
-							console.log(para);
-							axios.post(frontUrl+'/api/weeklylist/update', {
-								params: para,
-								withCredentials: true,
-								headers: {
-									'Content-Type': 'application/json;charset=UTF-8'
-								}
-							})
-							.then(function (res) {
-								that.editLoading = false;
-								that.$message({
-									message: '更新成功',
-									type: 'success'
-								});
-								that.$refs['editForm'].resetFields();
-								that.editFormVisible = false;
-								that.handleList();
-							})
-							.catch(function (error) {
-								console.log(JSON.stringify(error));
-							});
-							// editUser(para).then((res) => {
-							// 	this.editLoading = false;
-							// 	//NProgress.done();
-							// 	this.$message({
-							// 		message: '提交成功',
-							// 		type: 'success'
-							// 	});
-							// 	this.$refs['editForm'].resetFields();
-							// 	this.editFormVisible = false;
-							// 	this.getUsers();
-							// });
+							this.edit(para);
 						});
 					}
 				});
+			},
+			edit: async function(para){
+				const res =  await http.post(frontUrl+'/api/weeklylist/update',para)
+				if(res.data.status=="1"){ 
+					this.editLoading = false;
+					this.$message({
+						message: '更新成功',
+						type: 'success'
+					});
+					this.$refs['editForm'].resetFields();
+					this.editFormVisible = false;
+					this.handleList();
+				}else {
+					this.$message({
+						message: res.data.message,
+						type: 'error'
+					});
+				}    
 			},
 			//新增
 			addSubmit: function () {
@@ -312,42 +276,29 @@
 							//NProgress.start();
 							let that = this;
 							let para = Object.assign({}, this.addForm);
-							axios.post(frontUrl+'/api/weeklylist/add', {
-								params: para,
-								withCredentials: true,
-								headers: {
-									'Content-Type': 'application/json;charset=UTF-8'
-								}
-							})
-								.then(function (res) {
-									that.addLoading = false;
-									that.weeklyClass = res.data.result;
-									that.listLoading = false;
-									that.$message({
-										message: '提交成功',
-										type: 'success'
-									});
-									that.$refs['addForm'].resetFields();
-									that.addFormVisible = false;
-									that.handleList();
-								})
-								.catch(function (error) {
-									console.log(JSON.stringify(error));
-								});
-							// addUser(para).then((res) => {
-							// 	this.addLoading = false;
-							// 	//NProgress.done();
-							// 	this.$message({
-							// 		message: '提交成功',
-							// 		type: 'success'
-							// 	});
-							// 	this.$refs['addForm'].resetFields();
-							// 	this.addFormVisible = false;
-							// 	this.getUsers();
-							// });
+							this.addinfo(para)
 						});
 					}
 				});
+			},
+			addinfo: async function(para){
+				const res = await http.post(frontUrl+'/api/weeklylist/add',para)
+				if(res.data.status=="1"){ 
+					this.addLoading = false;
+					this.listLoading = false;
+					this.$message({
+						message: '提交成功',
+						type: 'success'
+					});
+					this.$refs['addForm'].resetFields();
+					this.addFormVisible = false;
+					this.handleList();
+				}else {
+					this.$message({
+						message: res.data.message,
+						type: 'error'
+					});
+				}
 			},
 			//添加大类
 			add(){

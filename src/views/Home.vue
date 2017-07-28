@@ -72,6 +72,8 @@
 </template>
 
 <script>
+    import http from '../utils/http'
+    import {frontUrl} from '../../config/frontUrl'
 	export default {
 		data() {
 			return {
@@ -109,8 +111,17 @@
 				this.$confirm('确认退出吗?', '提示', {
 					//type: 'warning'
 				}).then(() => {
-					sessionStorage.removeItem('user');
-					_this.$router.push('/login');
+					const res = http.get(frontUrl+'/api/user/logout',)
+					// if(res.data.status=="1"){ 
+					// 	this.weeklyClass = res.data.result;
+					// 	this.listLoading = false;
+					// }else {
+					//       this.$message({
+					//           message: res.data.message,
+					//           type: 'error'
+					//       });
+					//  }
+					_this.$router.push('/admin');
 				}).catch(() => {
 
 				});
@@ -138,9 +149,9 @@
 
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 	//@import '../../src/styles/vars.scss';
-	$color-primary: #20a0ff;//#18c79c
+	@color-primary: #20a0ff;//#18c79c
 	.el-submenu [class^=fa] {
 		vertical-align: baseline;
 		margin-right: 10px;
@@ -158,7 +169,7 @@
 		.header {
 			height: 60px;
 			line-height: 60px;
-			background: $color-primary;
+			background: @color-primary;
 			color:#fff;
 			.userinfo {
 				text-align: right;
