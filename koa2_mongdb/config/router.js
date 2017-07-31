@@ -15,6 +15,7 @@ module.exports = function(){
   router.post('/weeklyClassificate/update',auth.userRequired,weeklyClassificate.update)
   //周刊
   router.post('/weeklylist/add',auth.userRequired,weeklylist.add)
+  router.post('/weeklylist/upload',weeklylist.upload)
   router.get('/weeklylist/del',auth.userRequired,weeklylist.del)
   router.post('/weeklylist/update',auth.userRequired,weeklylist.update)
   //登录

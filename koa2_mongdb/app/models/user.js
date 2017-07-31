@@ -1,14 +1,17 @@
 'use strict'
 
 var mongoose = require('mongoose')
-var Schema = mongoose.Schema;
+var Schema = mongoose.Schema
 
-var UserSchema = new Schema({
-  username: String,
-  password: String
-},{
-  versionKey: false
-})
+var UserSchema = new Schema(
+  {
+    username: String,
+    password: String,
+  },
+  {
+    versionKey: false,
+  },
+)
 
 var User = mongoose.model('User', UserSchema)
 module.exports = User
