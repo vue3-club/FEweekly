@@ -12,7 +12,10 @@
 		  <el-table :data="weeklylists" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
 			<el-table-column prop="period" label="周刊周期" min-width="60" sortable>
 			</el-table-column>
-			<el-table-column prop="cover_url" label="周刊封面"min-width="180" >
+			<el-table-column   label="周刊封面"min-width="180" >
+				<template scope="scope">
+					<img :src="scope.row.cover_url" width="100" height="100"/>
+				</template>
 			</el-table-column>
 			<el-table-column prop="title" label="周刊描述">
 			</el-table-column>
@@ -27,7 +30,17 @@
 		<el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false">
 			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
 				<el-form-item label="周刊封面" prop="cover_url">
-					<el-input v-model="editForm.cover_url" auto-complete="off"></el-input>
+					<el-upload
+					class="upload-demo"
+					action="http://127.0.0.1:9090/api/weeklylist/upload"
+					:on-preview="handlePreview"
+					:on-remove="handleRemove"
+					:on-success="handleSuccess"
+					:file-list="fileList"
+					list-type="picture"
+					>
+					<el-button size="small" type="primary">点击上传</el-button>
+					</el-upload>
 				</el-form-item>
 				<el-form-item label="周期" prop="period">
 					<el-input v-model="editForm.period" auto-complete="off"></el-input>
@@ -76,9 +89,21 @@
 		<!--新增界面-->
 		<el-dialog title="新增" v-model="addFormVisible" :close-on-click-modal="false">
 			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-				<el-form-item label="周刊封面" prop="cover_url">
-					<el-input v-model="addForm.cover_url" auto-complete="off"></el-input>
+                <el-form-item label="周刊封面" prop="cover_url">
+					<el-upload
+					class="upload-demo"
+					action="http://127.0.0.1:9090/api/weeklylist/upload"
+					:on-preview="handlePreview"
+					:on-remove="handleRemove"
+					:on-success="handleSuccess"
+					:file-list="fileList"
+					list-type="picture">
+					<el-button size="small" type="primary">点击上传</el-button>
+					</el-upload>
 				</el-form-item>
+				 <!-- <el-form-item label="周刊封面" prop="cover_url">
+					<el-input v-model="addForm.cover_url" auto-complete="off"></el-input>
+				</el-form-item>  -->
 				<el-form-item label="周期" prop="period">
 					<el-input v-model="addForm.period" auto-complete="off"></el-input>
 				</el-form-item>
@@ -134,9 +159,11 @@
 			return {
 				filters: {
 					name: ''
-				},			
+				},
+				uploadUrl:`${frontUrl}/api/weeklylist/upload`,		
 				users: [],
 				total: 0,
+				fileList: [],
 				page: 1,
 				listLoading: false,
 				sels: [],//列表选中列
@@ -154,7 +181,7 @@
 					cover_url: '', // 周刊封面
                     period: '', // 周期
                     title: '',
-                     info:[]
+                    info:[]
 				},
 
 				addFormVisible: false,//新增界面是否显示
@@ -174,6 +201,17 @@
 			}
 		},
 		methods: {
+			//图片上传相关
+			handleRemove(file, fileList) {
+				console.log(file, fileList);
+			},
+			handlePreview(file) {
+				console.log(file);
+			},
+			handleSuccess(response, file, fileList){
+				console.log(response.result.url)
+				this.addForm.cover_url=response.result.url
+			},
 			//列表
 			handleList:async function(){
 				let that = this;

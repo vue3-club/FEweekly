@@ -9,13 +9,17 @@ const logger = require('koa-logger')
 const session = require("koa-session")
 const bodyParser = require('koa-bodyparser')
 const cors = require('koa2-cors')
+const Busboy = require('busboy')
 const app = new Koa()
+
 const models_path = path.join(__dirname, '/app/models')
 const CONFIG = {key: 'koa:sess', maxAge: 86400000,overwrite: true, httpOnly: true, signed: true, rolling: false}
 mongoose.set('debug', true)
 mongoose.Promise = global.Promise
 mongoose.Promise = require('bluebird')
 mongoose.connect(db,{useMongoClient:true})
+
+
 var walk = function(modelPath) {
   fs
     .readdirSync(modelPath)
@@ -34,8 +38,11 @@ var walk = function(modelPath) {
     })
 }
 walk(models_path)
+
+
 const router = require('./config/router')()
 app.keys = ['feweekly']
+
 app.use(logger())
 app.use(bodyParser())
 app.use(session(CONFIG, app));
@@ -47,6 +54,8 @@ app.use(cors({
   allowMethods: ['GET', 'POST', 'DELETE'],
   allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
 }));
+
+
 app.use(router.routes()).use(router.allowedMethods());
 app.listen(9090)
 console.log('koa2_mongdb started at port 9090...');
