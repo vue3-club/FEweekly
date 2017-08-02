@@ -2,7 +2,7 @@
 require('babel-register')
 const fs = require('fs')
 const path = require('path')
-const db = 'mongodb://localhost/feweekly'
+const db = 'mongodb://localhost:10086/feweekly'
 const mongoose = require('mongoose')
 const Koa = require('koa')
 const logger = require('koa-logger')
@@ -58,4 +58,4 @@ app.use(cors({
 
 app.use(router.routes()).use(router.allowedMethods());
 app.listen(9090)
-console.log('koa2_mongdb started at port 9090...');
+console.log('FeWeekly started at port 9090...');
