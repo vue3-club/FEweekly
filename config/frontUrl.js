@@ -1,1 +1,1 @@
-export const frontUrl = "http://127.0.0.1:9090"
+export const frontUrl = "http://api.feweekly.vue-js.com"
