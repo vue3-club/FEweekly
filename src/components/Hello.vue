@@ -1,4 +1,5 @@
 <template>
+  <div style="position:relative">
   <div class="weekly">
     <div class="cover">
       <img v-bind:src="weekly.cover_url" alt="">
@@ -15,6 +16,15 @@
       </div>
     </div>
   </div>
+  <el-menu :default-active="activeIndex2" mode="horizontal" @select="handleSelect" style="width:116px; position:fixed; left:75%; top:300px; border-top:1px solid #e5e5e5; background:#fff; margin-right:640px;">
+      <el-submenu index="2">
+            <template slot="title">往期内容</template>
+            <div  v-for="data in weeklyPeriod">
+                 <el-menu-item :index="data.period">第{{data.period}}期</el-menu-item>
+            </div>
+      </el-submenu>
+   </el-menu>
+  </div>
 </template>
 <script>
 import http from '../utils/http'
@@ -25,44 +35,47 @@ export default {
   data () {
     return {
       msg: 'Welcome to FEweekly',
+      period:"333",
+      activeIndex: '1',
+      activeIndex2: '1',
       weekly:{
           cover_url: '', 
           period: '', 
           title: '',
           info:[]
-			}
+      },
+      weeklyPeriod:{
+
+      }
     }
   },
   methods: {
-		//列表
-		list:async function(){
+    handleSelect(key, keyPath) {
+        this.list(key);
+    },
+		//获得每期内容
+		list:async function(period){
         let that = this
-        let para = { period: 1 }
-        // const res = await http.get(frontUrl+'api/weeklylist/getWeeklyFindById',para)
-				// if(res.data.result[0]){
-        //       that.weekly = res.data.result[0];
-        //       that.weekly.info=JSON.parse(res.data.result[0].info)
-        // }
-        axios.get(frontUrl+'/api/weeklylist/getWeeklyFindById', {
-          params: para,
-          withCredentials: true
-        })
-        .then(function (res) {
-            if(res.data.result[0]){
+        let para = { period: period }
+        console.log(para)
+        const res = await http.get(frontUrl+'/api/weeklylist/getWeeklyFindById',para)
+				if(res.data.result[0]){
               that.weekly = res.data.result[0];
               that.weekly.info=JSON.parse(res.data.result[0].info)
-            }
-        })
-        .catch(function (error) {
-          console.log(JSON.stringify(error));
-        });
-
-        
-		}
+        } 
+    },
+    //获得期数列表
+    listPeriod:async function(){
+        let that = this
+        const res = await http.get(frontUrl+'/api/weeklylist/list')
+				if(res.data.result[0]){
+              that.weeklyPeriod = res.data.result;
+        }
+    }
   },
   mounted() {
-		this.list();
-
+		this.list(this.period);
+    this.listPeriod();
 	}
 }
 </script>

@@ -12,7 +12,7 @@ exports.add = async (ctx, next) => {
   const cover_url = ctx.request.body.cover_url
   const period = ctx.request.body.period
   const title = ctx.request.body.title
-  const info = JSON.parse(ctx.request.body.info)
+  const info = JSON.stringify(ctx.request.body.info)
   var weeklylist = new Weeklylist({
     cover_url: cover_url,
     period: period,
@@ -92,7 +92,6 @@ exports.update = async (ctx, next) => {
   }
 }
 
-
 const uploadFile = async (ctx, next) => {
   let req = ctx.request
   let busboy = new Busboy({ headers: req.headers })
@@ -103,10 +102,9 @@ const uploadFile = async (ctx, next) => {
       upload.upload(fs.createReadStream(saveTo), function(err, result) {
         resolve(result)
       })
-
     })
 
-    busboy.on('error', function (err) {
+    busboy.on('error', function(err) {
       console.log('err...')
       reject(err)
     })
