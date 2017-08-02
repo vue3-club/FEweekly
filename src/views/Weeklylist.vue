@@ -92,7 +92,7 @@
                 <el-form-item label="周刊封面" prop="cover_url">
 					<el-upload
 					class="upload-demo"
-					action="http://127.0.0.1:9090/api/weeklylist/upload"
+					action="http://api.feweekly.vue-js.com/api/weeklylist/upload"
 					:on-preview="handlePreview"
 					:on-remove="handleRemove"
 					:on-success="handleSuccess"
