@@ -35,7 +35,7 @@ export default {
   data () {
     return {
       msg: 'Welcome to FEweekly',
-      period:"333",
+      period:"1",
       activeIndex: '1',
       activeIndex2: '1',
       weekly:{
@@ -57,7 +57,6 @@ export default {
 		list:async function(period){
         let that = this
         let para = { period: period }
-        console.log(para)
         const res = await http.get(frontUrl+'/api/weeklylist/getWeeklyFindById',para)
 				if(res.data.result[0]){
               that.weekly = res.data.result[0];
@@ -70,11 +69,13 @@ export default {
         const res = await http.get(frontUrl+'/api/weeklylist/list')
 				if(res.data.result[0]){
               that.weeklyPeriod = res.data.result;
+              that.weekly = res.data.result[0];
+              that.weekly.info=JSON.parse(res.data.result[0].info)
         }
     }
   },
   mounted() {
-		this.list(this.period);
+		// this.list(this.period);
     this.listPeriod();
 	}
 }
