@@ -51,7 +51,6 @@ exports.del = async (ctx, next) => {
 }
 exports.getWeeklyFindById = async (ctx, next) => {
   const period = ctx.request.query.period
-  console.log('period')
   var data = await weeklylistHelper.getWeeklyFindById({ period })
   ctx.body = {
     status: 1,
@@ -92,6 +91,14 @@ exports.update = async (ctx, next) => {
   }
 }
 
+const removeCacheFile = (url) => {
+  fs.unlink(url, function(err) {
+     if (err) {
+         return console.error(err);
+     }
+  });
+}
+
 const uploadFile = async (ctx, next) => {
   let req = ctx.request
   let busboy = new Busboy({ headers: req.headers })
@@ -100,6 +107,7 @@ const uploadFile = async (ctx, next) => {
       const saveTo = path.join(config.uploadUrl, filename)
       file.pipe(fs.createWriteStream(saveTo))
       upload.upload(fs.createReadStream(saveTo), function(err, result) {
+        removeCacheFile(saveTo)
         resolve(result)
       })
     })
