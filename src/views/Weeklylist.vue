@@ -35,7 +35,7 @@
 					:action="uploadUrl"
 					:on-preview="handlePreview"
 					:on-remove="handleRemove"
-					:on-success="handleSuccess"
+					:on-success="handleEditeSuccess"
 					:file-list="fileList"
 					list-type="picture"
 					>
@@ -64,19 +64,25 @@
 							</el-select> 
 						 </el-col>
 						<el-col :span="12">
+							<el-button type="primary" class="el-icon-minus" @click="delEditKind(index)">删除分类</el-button>
 						    <el-button type="primary" class="el-icon-plus" @click='addArticle_edit(index)'>添加文章</el-button>
 						</el-col>
 					</el-form-item>
-					<div v-for="(data,index) in item.list">
-						<el-form-item label="文章标题" prop="title">
-							<el-input v-model="data.title" auto-complete="off"></el-input>
-						</el-form-item>
-						<el-form-item label="文章链接" prop="url">
-							<el-input v-model="data.url" auto-complete="off"></el-input>
-						</el-form-item>
-						<el-form-item label="文章描述" prop="describe">
-							<el-input v-model="data.describe" auto-complete="off"></el-input>
-						</el-form-item>
+					<div v-for="(data,index1) in item.list">
+						<div  @mouseenter="enter(index1)" @mouseleave="leave(index1)"  :class="{ 'colorChage':ind === index1}">
+							<el-card class="box-card" style="margin-bottom:5px;">
+								<el-form-item label="文章标题" prop="title">
+									<el-input v-model="data.title" auto-complete="off"></el-input>
+								</el-form-item>
+								<el-form-item label="文章链接" prop="url">
+									<el-input v-model="data.url" auto-complete="off"></el-input>
+								</el-form-item>
+								<el-form-item label="文章描述" prop="describe">
+									<el-input v-model="data.describe" auto-complete="off"></el-input>
+								</el-form-item>
+								<el-button type="primary"   @click='delEditArticle(index,index1)'  :class="{'ChageHide':false}" >删除文章</el-button>
+							</el-card>
+					    </div>
 					</div>
 				</div> 
 			</el-form>
@@ -101,9 +107,6 @@
 					<el-button size="small" type="primary">点击上传</el-button>
 					</el-upload>
 				</el-form-item>
-				 <!-- <el-form-item label="周刊封面" prop="cover_url">
-					<el-input v-model="addForm.cover_url" auto-complete="off"></el-input>
-				</el-form-item>  -->
 				<el-form-item label="周期" prop="period">
 					<el-input v-model="addForm.period" auto-complete="off"></el-input>
 				</el-form-item>
@@ -123,23 +126,30 @@
 								:label="item.name"
 								:value="item.name">
 								</el-option>
-							</el-select> 
+							</el-select>
 						 </el-col>
+
 						<el-col :span="12">
+							<el-button type="primary" class="el-icon-minus" @click="delKind(index)">删除分类</el-button>
 						    <el-button type="primary" class="el-icon-plus" @click='addArticle(index)'>添加文章</el-button>
 						</el-col>
 					</el-form-item>
-					<div v-for="(data,index) in item.list">
-						<el-form-item label="文章标题" prop="title">
-							<el-input v-model="data.title" auto-complete="off"></el-input>
-						</el-form-item>
-						<el-form-item label="文章链接" prop="url">
-							<el-input v-model="data.url" auto-complete="off"></el-input>
-						</el-form-item>
-						<el-form-item label="文章描述" prop="describe">
-							<el-input v-model="data.describe" auto-complete="off"></el-input>
-						</el-form-item>
-					</div>
+						<div v-for="(data,index1) in item.list">
+							<div  @mouseenter="enter(index1)" @mouseleave="leave(index1)"  :class="{ 'colorChage':ind === index1}">
+							<el-card class="box-card" style="margin-bottom:5px;">
+								<el-form-item label="文章标题" prop="title">
+									<el-input v-model="data.title" auto-complete="off"></el-input>
+								</el-form-item>
+								<el-form-item label="文章链接" prop="url">
+									<el-input v-model="data.url" auto-complete="off"></el-input>
+								</el-form-item>
+								<el-form-item label="文章描述" prop="describe">
+									<el-input v-model="data.describe" auto-complete="off"></el-input>
+								</el-form-item>
+								<el-button type="primary"   @click='delArticle(index,index1)'  :class="{'ChageHide':false}" >删除文章</el-button>
+							</el-card>
+							</div>
+						</div>
 				</div>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -160,6 +170,11 @@
 				filters: {
 					name: ''
 				},
+				styleObject:{
+                  display:"show"
+				},
+				ind:'',
+				ChageHide:true,
 				uploadUrl:`${frontUrl}/api/weeklylist/upload`,		
 				users: [],
 				total: 0,
@@ -211,6 +226,18 @@
 			handleSuccess(response, file, fileList){
 				console.log(response.result.url)
 				this.addForm.cover_url=response.result.url
+			},
+			handleEditeSuccess(response, file, fileList){
+				console.log(response.result.url)
+				this.editForm.cover_url=response.result.url
+			},
+			enter(index1){
+			   this.ind = index1
+			   this.ChageHide=false
+			},
+			leave(index1){
+			   this.ind=false;
+			   this.ChageHide=true
 			},
 			//列表
 			handleList:async function(){
@@ -270,6 +297,7 @@
 			//显示编辑界面
 			handleEdit: function (index, row) {
 				this.editFormVisible = true;
+				this.fileList=[{ url:row.cover_url}]
 				this.editForm = Object.assign({}, row);
 				this.editForm.info=JSON.parse(row.info);
 			},
@@ -278,12 +306,11 @@
 				let that = this;
 				this.$refs.editForm.validate((valid) => {
 					if (valid) {
-						this.$confirm('确认提交吗？', '提示', {}).then(() => {
 							this.editLoading = true;
-							//NProgress.start();
 							let para = Object.assign({}, this.editForm);
 							this.edit(para);
-						});
+							this.handleList();
+			                this.weeklyClassificate();
 					}
 				});
 			},
@@ -309,13 +336,10 @@
 			addSubmit: function () {
 				this.$refs.addForm.validate((valid) => {
 					if (valid) {
-						this.$confirm('确认提交吗？', '提示', {}).then(() => {
 							this.addLoading = true;
-							//NProgress.start();
 							let that = this;
 							let para = Object.assign({}, this.addForm);
 							this.addinfo(para)
-						});
 					}
 				});
 			},
@@ -346,6 +370,7 @@
 					list: []
                 })
 			},
+
 			//添加大类(编辑中)
 			add_edit(){
                 this.editForm.info.push({
@@ -353,6 +378,18 @@
 					type_id:"", 
 					list: []
                 })
+			},
+			delKind(index){
+               this.addForm.info.splice(index,1)
+			},
+			delEditKind(index){
+               this.editForm.info.splice(index,1)
+			},
+			delArticle(index,index1){
+               this.addForm.info[index].list.splice(index1,1)
+			},
+			delEditArticle(index,index1){
+               this.editForm.info[index].list.splice(index1,1)
 			},
 			//添加文章
 			addArticle(index){
@@ -400,5 +437,10 @@
 </script>
 
 <style scoped>
-
+    .colorChage .el-card{
+		background-color:#eef1f6;
+	}
+    .ChageHide{
+		display: none;
+	}
 </style>
