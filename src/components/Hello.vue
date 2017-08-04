@@ -16,7 +16,7 @@
       </div>
     </div>
   </div>
-  <el-menu :default-active="activeIndex2" class="history" mode="horizontal" @select="handleSelect" style="width:116px; position:fixed; left:75%; top:300px; border-top:1px solid #e5e5e5; background:#fff; margin-right:640px;">
+  <el-menu :default-active="activeIndex2" class="history" mode="horizontal" @select="handleSelect" style="width:116px; position:fixed; right:10px; top:10px;  border-top:1px solid #e5e5e5; background:#fff; ">
       <el-submenu index="2">
             <template slot="title">往期内容</template>
             <div  v-for="data in weeklyPeriod">
@@ -145,7 +145,6 @@ export default {
       min-width: 100%;
       min-height: 100%;
       vertical-align: middle;
-      filter: blur(3px);
     }
   }
 </style>
