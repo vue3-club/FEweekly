@@ -67,13 +67,13 @@ export default {
       console.log(info)
       let hot = null;
       for(let i=0; i<info.length; i++){
-        // let cur = info[i];
-        // if(cur && cur.type_name === '***热点***'){
-        //   hot = cur;
-        //   info.splice(i,1)
-        // }
+        let cur = info[i];
+        if(cur && cur.type_name === '***热点***'){
+          hot = cur;
+          info.splice(i,1)
+        }
       }
-      //info.unshift(hot)
+      info.unshift(hot)
     },
     //获得期数列表
     listPeriod:async function(){
