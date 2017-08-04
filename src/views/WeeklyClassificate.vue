@@ -112,11 +112,9 @@ export default {
 		addSubmit: function () {
 			this.$refs.addForm.validate((valid) => {
 				if (valid) {
-					this.$confirm('确认提交吗？', '提示', {}).then(() => {
 						this.addLoading = true;
 						let para = Object.assign({}, this.addForm);
 						this.add(para)
-					});
 				}
 			});
 		},
@@ -191,12 +189,9 @@ export default {
 			let that = this;
 			this.$refs.editForm.validate((valid) => {
 				if (valid) {
-					this.$confirm('确认提交吗？', '提示', {}).then(() => {
 						this.editLoading = true;
-						//NProgress.start();
 						let para = Object.assign({}, this.editForm);
 						this.edit(para);
-					});
 				}
 			});
 		},

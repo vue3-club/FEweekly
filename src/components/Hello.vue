@@ -6,7 +6,7 @@
     </div>
     <div class="main">
       <div class="category"  v-for="info in weekly.info">
-        <h2 class="category_title">👍🏼{{info.type_name}}</h2>
+        <h2 :class="{'category_title': true, 'hot': info.type_name === '***热点***'}">👍🏼{{info.type_name}}</h2>
         <ul class="list">
           <li v-for="list in info.list" >
             <h3><a :href="list.url">{{list.title}}</a></h3>
@@ -16,7 +16,7 @@
       </div>
     </div>
   </div>
-  <el-menu :default-active="activeIndex2" mode="horizontal" @select="handleSelect" style="width:116px; position:fixed; left:75%; top:300px; border-top:1px solid #e5e5e5; background:#fff; margin-right:640px;">
+  <el-menu :default-active="activeIndex2" class="history" mode="horizontal" @select="handleSelect" style="width:116px; position:fixed; left:75%; top:300px; border-top:1px solid #e5e5e5; background:#fff; margin-right:640px;">
       <el-submenu index="2">
             <template slot="title">往期内容</template>
             <div  v-for="data in weeklyPeriod">
@@ -35,7 +35,7 @@ export default {
   data () {
     return {
       msg: 'Welcome to FEweekly',
-      period:"333",
+      period:"1",
       activeIndex: '1',
       activeIndex2: '1',
       weekly:{
@@ -57,12 +57,23 @@ export default {
 		list:async function(period){
         let that = this
         let para = { period: period }
-        console.log(para)
         const res = await http.get(frontUrl+'/api/weeklylist/getWeeklyFindById',para)
 				if(res.data.result[0]){
               that.weekly = res.data.result[0];
               that.weekly.info=JSON.parse(res.data.result[0].info)
         } 
+    },
+    sortInfo: function(info){
+      console.log(info)
+      let hot = null;
+      for(let i=0; i<info.length; i++){
+        // let cur = info[i];
+        // if(cur && cur.type_name === '***热点***'){
+        //   hot = cur;
+        //   info.splice(i,1)
+        // }
+      }
+      //info.unshift(hot)
     },
     //获得期数列表
     listPeriod:async function(){
@@ -70,11 +81,15 @@ export default {
         const res = await http.get(frontUrl+'/api/weeklylist/list')
 				if(res.data.result[0]){
               that.weeklyPeriod = res.data.result;
+              that.weekly = res.data.result[0];
+              that.weekly.info=JSON.parse(res.data.result[0].info)
+              that.sortInfo(that.weekly.info)
+
         }
     }
   },
   mounted() {
-		this.list(this.period);
+		// this.list(this.period);
     this.listPeriod();
 	}
 }
@@ -94,6 +109,11 @@ export default {
       border: none;
     }
   }
+  .history{
+    @media (max-width: @bodyWdith) {
+      display: none
+    }
+  }
   .main{
     padding: 40px;
   }
@@ -101,6 +121,9 @@ export default {
     .category_title{
       color: @defaultColor;
       margin-bottom: 8px;
+      &.hot{
+        color: red
+      }
     }
     .desc{
       margin: 8px  0;

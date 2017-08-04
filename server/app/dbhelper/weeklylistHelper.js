@@ -9,7 +9,7 @@ exports.add = async weeklylist => {
 }
 
 exports.list = async () => {
-  var query = weeklylist.find({})
+  var query = weeklylist.find().sort({period:-1})
   var res = []
   await query.exec(function(err, weeklylist) {
     if (err) {
