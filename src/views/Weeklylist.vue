@@ -68,7 +68,7 @@
 						    <el-button type="primary" class="el-icon-plus" @click='addArticle_edit(index)'>添加文章</el-button>
 						</el-col>
 					</el-form-item>
-					<div v-for="(data,index) in item.list">
+					<div v-for="(data,index1) in item.list">
 						<div  @mouseenter="enter(index1)" @mouseleave="leave(index1)"  :class="{ 'colorChage':ind === index1}">
 							<el-card class="box-card" style="margin-bottom:5px;">
 								<el-form-item label="文章标题" prop="title">
