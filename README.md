@@ -1,8 +1,10 @@
 # Feweekly
 
-> Vue中文社区周刊
+> [Vue中文社区周刊](http://weekly.vue-js.com/)
 
-## Use 
+![image](https://user-images.githubusercontent.com/9276376/29012165-09261306-7b6c-11e7-9260-65294cb4affc.png)
+
+## Client run 
 
 1. download `git clone https://github.com/vueClub/FEweekly`
 2. download dependencies `npm i` or `yarn install `
@@ -34,12 +36,13 @@ npm run e2e
 npm test
 ```
 
-## Server use
+## Server run
 
 1. `cd server`
 2. Please make sure your Node version >= v7.6.0
 3. `npm i` or `yarn install`
-4. node app
+4. `cp config.default.js config.js` And replace your info in config.js
+5. node app
 
 ## Contribution
 [@wuyanwen](https://github.com/wuyanwen)
