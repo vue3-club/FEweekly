@@ -1,8 +1,9 @@
 <template>
   <div style="position:relative">
   <div class="weekly">
-    <div class="cover">
-      <img v-bind:src="weekly.cover_url" alt="">
+    <div class="cover_container">
+      <div class="cover" ref="cover" v-bind:style="{background: 'url(' + weekly.cover_url + ') no-repeat center center'}"></div>
+      <h3 v-bind:style="{color:randomColor()}">FEweekly</h3>
     </div>
     <div class="main">
       <div class="category"  v-for="info in weekly.info">
@@ -49,9 +50,14 @@ export default {
       }
     }
   },
+
   methods: {
     handleSelect(key, keyPath) {
         this.list(key);
+    },
+    randomColor(){
+      let colorArr = ['#0b7c39','#3488e3','#ca34e3','#e39f34','#be2152'];
+      return colorArr[Math.floor(Math.random() * colorArr.length)]
     },
 		//获得每期内容
 		list:async function(period){
@@ -64,7 +70,6 @@ export default {
         } 
     },
     sortInfo: function(info){
-      console.log(info)
       let hot = null;
       for(let i=0; i<info.length; i++){
         let cur = info[i];
@@ -137,14 +142,29 @@ export default {
       }
     }
   }
-  .cover{
+  .cover_container{
     height: 220px;
-    background: #d4d4dd;
-    overflow: hidden;
-    img{
-      min-width: 100%;
-      min-height: 100%;
-      vertical-align: middle;
+    position: relative;
+    .cover{
+      height: 100%;
+      background-size: cover !important;
+      overflow: hidden;
+      -webkit-filter: blur(2px);
+      img{
+        min-width: 100%;
+        min-height: 100%;
+        vertical-align: middle;
+      }
+    }
+    h3{
+      position: absolute;
+      bottom: 10px;
+      left: 20px;
+      font-size: 32px;
+      @media (max-width: @bodyWdith) {
+        font-size: 22px;
+      }
     }
   }
+
 </style>
