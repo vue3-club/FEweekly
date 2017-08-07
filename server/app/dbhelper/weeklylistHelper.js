@@ -23,7 +23,6 @@ exports.list = async () => {
 
 exports.del = async ({ _id }) => {
   var flag = false
-  console.log('flag==========>' + flag)
   await weeklylist.remove({ _id }, function(err) {
     if (err) {
       flag = false
@@ -31,7 +30,6 @@ exports.del = async ({ _id }) => {
       flag = true
     }
   })
-  console.log('flag=====await=====>' + flag)
   return flag
 }
 
