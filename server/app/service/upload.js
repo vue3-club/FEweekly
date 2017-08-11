@@ -3,7 +3,7 @@ const config = require('../../config.js')
 const client = qn.create({
   accessKey: config.qn_accessKey,
   secretKey: config.qn_secretKey,
-  bucket: 'feweekly',
+  bucket: 'vueclub',
   domain: 'http://ooaa8syjw.bkt.clouddn.com',
 })
 export default client
