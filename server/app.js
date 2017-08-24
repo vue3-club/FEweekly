@@ -1,9 +1,9 @@
 'use strict'
 require('babel-register')
-const config = require('./config')
+const config1 = require('./config')
 const fs = require('fs')
 const path = require('path')
-const db = config.db
+const db = config1.config.db
 const mongoose = require('mongoose')
 const Koa = require('koa')
 const logger = require('koa-logger')
