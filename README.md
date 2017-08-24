@@ -1,5 +1,9 @@
 # Feweekly
-## 此版是旧版，修改了线上遇到的bug,是为了vue中文社区周刊系统开发的,感谢vue中文社区对作者的大力支持，升级版（weeklyPlus）正在开发中，敬请期待。https://github.com/wuyanwen/weeklyPlus
+### 此版是旧版，修改了线上遇到的bug,是为了vue中文社区周刊系统开发的
+
+感谢vue中文社区对作者的大力支持，升级版（weeklyPlus）正在开发中，敬请期待。
+
+https://github.com/wuyanwen/weeklyPlus
 
 ## Client run 
 
