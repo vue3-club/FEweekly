@@ -8,7 +8,7 @@
         👈🏼随时随地了解前端最新资讯
       </div>
     </div>
-    <p class="copyright">Copyright© 2017 <a href="https://www.vue-js.com">vueClub</a>. All Rights Reserved.</p>
+    <p class="copyright">Copyright© 2017 <a href="https://www.vue-js.com">vueClub</a>. All Rights Reserved.<a href="https://github.com/vueClub/FEweekly">源码地址</a></p>
   </div>
 </template>
 

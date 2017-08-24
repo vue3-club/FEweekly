@@ -1,8 +1,9 @@
 <template>
   <div style="position:relative">
   <div class="weekly">
-    <div class="cover">
-      <img v-bind:src="weekly.cover_url" alt="">
+    <div class="cover_container">
+      <div class="cover" ref="cover" v-bind:style="{background: 'url(' + weekly.cover_url + ') no-repeat center center'}"></div>
+      <h3 v-bind:style="{color:randomColor()}">FEweekly</h3>
     </div>
     <div class="main">
       <div class="category"  v-for="info in weekly.info">
@@ -16,7 +17,7 @@
       </div>
     </div>
   </div>
-  <el-menu :default-active="activeIndex2" class="history" mode="horizontal" @select="handleSelect" style="width:116px; position:fixed; left:75%; top:300px; border-top:1px solid #e5e5e5; background:#fff; margin-right:640px;">
+  <el-menu :default-active="activeIndex2" class="history" mode="horizontal" @select="handleSelect" style="width:116px; position:fixed; right:10px; top:10px;  border-top:1px solid #e5e5e5; background:#fff; ">
       <el-submenu index="2">
             <template slot="title">往期内容</template>
             <div  v-for="data in weeklyPeriod">
@@ -42,16 +43,25 @@ export default {
           cover_url: '', 
           period: '', 
           title: '',
-          info:[]
+          info:[
+            {
+              type_name:''
+            }
+          ]
       },
       weeklyPeriod:{
 
       }
     }
   },
+
   methods: {
     handleSelect(key, keyPath) {
         this.list(key);
+    },
+    randomColor(){
+      let colorArr = ['#0b7c39','#3488e3','#ca34e3','#e39f34','#be2152'];
+      return colorArr[Math.floor(Math.random() * colorArr.length)]
     },
 		//获得每期内容
 		list:async function(period){
@@ -64,16 +74,17 @@ export default {
         } 
     },
     sortInfo: function(info){
-      console.log(info)
       let hot = null;
+
       for(let i=0; i<info.length; i++){
-        // let cur = info[i];
-        // if(cur && cur.type_name === '***热点***'){
-        //   hot = cur;
-        //   info.splice(i,1)
-        // }
+        let cur = info[i];
+        if(cur && cur.type_name === '***热点***'){
+          hot = cur;
+          info.splice(i,1)
+          info.unshift(hot)
+        }
       }
-      //info.unshift(hot)
+      
     },
     //获得期数列表
     listPeriod:async function(){
@@ -83,6 +94,7 @@ export default {
               that.weeklyPeriod = res.data.result;
               that.weekly = res.data.result[0];
               that.weekly.info=JSON.parse(res.data.result[0].info)
+              console.log(that.weekly.info)
               that.sortInfo(that.weekly.info)
 
         }
@@ -137,15 +149,29 @@ export default {
       }
     }
   }
-  .cover{
+  .cover_container{
     height: 220px;
-    background: #d4d4dd;
-    overflow: hidden;
-    img{
-      min-width: 100%;
-      min-height: 100%;
-      vertical-align: middle;
-      filter: blur(3px);
+    position: relative;
+    .cover{
+      height: 100%;
+      background-size: cover !important;
+      overflow: hidden;
+      -webkit-filter: blur(2px);
+      img{
+        min-width: 100%;
+        min-height: 100%;
+        vertical-align: middle;
+      }
+    }
+    h3{
+      position: absolute;
+      bottom: 10px;
+      left: 20px;
+      font-size: 32px;
+      @media (max-width: @bodyWdith) {
+        font-size: 22px;
+      }
     }
   }
+
 </style>

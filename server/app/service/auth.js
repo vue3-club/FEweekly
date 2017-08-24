@@ -3,7 +3,6 @@
  */
 exports.userRequired = async (ctx, next) => {
   if (!ctx.session || !ctx.session.user) {
-    console.log(ctx.response)
     ctx.response.status = 403
     return (ctx.body = {
       status: 4,

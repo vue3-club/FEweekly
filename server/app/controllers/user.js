@@ -7,7 +7,6 @@ var uuid = require('uuid')
 import userHelper from '../dbhelper/userHelper'
 //登录
 exports.findByUsername = async (ctx, next) => {
-  console.log(ctx)
   const username = ctx.request.body.username
   const password = ctx.request.body.password
   var data = await userHelper.findByUsername({ username })
@@ -17,7 +16,6 @@ exports.findByUsername = async (ctx, next) => {
         username,
         password,
       }
-      console.log(`user:ctx.session.user-${JSON.stringify(ctx.session.user)}`)
       ctx.body = {
         status: 1,
         message: 'success',

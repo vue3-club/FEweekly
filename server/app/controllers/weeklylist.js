@@ -3,7 +3,7 @@ var mongoose = require('mongoose')
 var Weeklylist = mongoose.model('weeklylist')
 import weeklylistHelper from '../dbhelper/weeklylistHelper'
 import upload from '../service/upload'
-import { config } from '../../config'
+import { config } from '../../config/index'
 import fs from 'fs'
 import path from 'path'
 const Busboy = require('busboy')

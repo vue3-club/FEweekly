@@ -1,8 +1,17 @@
-# feweekly
+# Feweekly
 
-> vue中文社区周刊
+> [Vue中文社区周刊](http://weekly.vue-js.com/)
 
-## Build Setup
+![image](https://user-images.githubusercontent.com/9276376/29012165-09261306-7b6c-11e7-9260-65294cb4affc.png)
+
+## Client run 
+
+1. download `git clone https://github.com/vueClub/FEweekly`
+2. download dependencies `npm i` or `yarn install `
+3. `npm run dev` then open your browser `http://127.0.0.1:8000`
+
+
+## Full cli
 
 ``` bash
 # install dependencies
@@ -27,11 +36,18 @@ npm run e2e
 npm test
 ```
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## Server run
 
-# 后台 koa2_mongdb
-## koa2_mongdb主要提供后台接口服务，默认9090端口启动，对外暴露两个接口参考其中的路由接口注释
-# 前台默认8080端口启动
+1. `cd server`
+2. Please make sure your Node version >= v7.6.0
+3. `npm i` or `yarn install`
+4. `cp config.default.js config.js` And replace your info in config.js
+5. node app
 
-# todo跨域session,cookie未完工。
+## Contribution
+[@wuyanwen](https://github.com/wuyanwen)
+
+## License
+
+MIT
 

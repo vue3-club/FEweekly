@@ -13,7 +13,6 @@ exports.findByUsername = async ({ username }) => {
       res = user
     }
   })
-  console.log('res====>' + res)
   return res
 }
 
@@ -51,7 +50,6 @@ exports.addUser = async user => {
  */
 exports.deleteUser = async ({ phoneNumber }) => {
   var flag = false
-  console.log('flag==========>' + flag)
   await User.remove({ phoneNumber }, function(err) {
     if (err) {
       flag = false
@@ -60,6 +58,5 @@ exports.deleteUser = async ({ phoneNumber }) => {
       flag = true
     }
   })
-  console.log('flag=====await=====>' + flag)
   return flag
 }
